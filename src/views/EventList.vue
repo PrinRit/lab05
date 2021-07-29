@@ -28,7 +28,6 @@
 // @ is an alias to /src
 import EventCard from '@/components/EventCard.vue'
 import EventService from '@/services/EventService.js'
-import NProgress from 'nprogress'
 // import { watchEffect } from '@vue/runtime-core'
 // import axios from 'axios'
 export default {
@@ -62,7 +61,6 @@ export default {
   //   })
   // },
   beforeRouteEnter(routeTo, routeFrom, next){
-    NProgress.start()
     EventService.getEvents(2, parseInt(routeTo.query.page)||1)
     .then((response)=>{
       next((comp)=>{
@@ -73,8 +71,16 @@ export default {
     .catch(()=>{
       next({name: 'NetworkError'})
     })
-    .finally(() =>{
-      NProgress.done()
+  },
+  beforeRouteUpdate(routeTo,routeFrom,next){
+    EventService.getEvents(2,parseInt(routeTo.query.page)||1)
+    .then((response)=>{
+      this.events = response.data //<----
+      this.totalEvents = response.headers['x-total-count'] //<----
+      next() //<----
+    })
+    .catch(()=>{
+      next({name: 'NetworkError'})
     })
   },
   computed: {
