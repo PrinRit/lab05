@@ -10,11 +10,11 @@ export default {
   methods:{
     edit(){
 
-      this.GStore.flashMessage = 
+      this.GStore.flash_edit = 
       'You are successfully editted for ' + this.event.title
       setTimeout(() =>{
         //After 3 seconds remove it
-        this.GStore.flashMessage = ''
+        this.GStore.flash_edit = ''
       }, 3000)
 
       this.$router.push({
